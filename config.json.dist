@@ -1,0 +1,11 @@
+{
+    "repositories": {
+        "Repo1": {
+            "path": "/var/git/repo1",
+        },
+        "Repo2": {
+            "path": "/var/git/repo2",
+            "script": "./generate_site.sh"
+        }
+    }
+}
