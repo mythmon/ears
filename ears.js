@@ -16,6 +16,11 @@ var server = http.createServer(function (req, res) {
 
   req.addListener('data', function (chunk) { data += chunk; });
   req.addListener('end', function () {
+    if (req.method != 'POST' || !data) {
+      res.writeHead(500);
+      res.end(JSON.stringify({"status": "what?"}));
+      return;
+    }
     data = data.replace(/^payload=/, '');
     data = decodeURIComponent(data);
     data = JSON.parse(data);
