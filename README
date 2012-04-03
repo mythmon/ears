@@ -1,0 +1,2 @@
+Node.js program to listen for incoming Github post-receive hooks, and act on
+them based on a config file.
