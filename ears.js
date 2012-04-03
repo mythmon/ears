@@ -23,11 +23,9 @@ var server = http.createServer(function (req, res) {
     handleHit(data, function (err) {
       if (err) {
         res.writeHead(500);
-        console.log({"status": err});
         res.end(JSON.stringify({"status": err}));
       } else {
         res.writeHead(200);
-        console.log({"status": "ok"});
         res.end(JSON.stringify({"status": "ok"}));
       }
     });
@@ -41,15 +39,25 @@ function handleHit(data, callback) {
     callback('no such repository "' + repo + '"');
     return;
   }
-  if (options.action === 'pull') {
-    cp.exec('git pull', {cwd: options.path}, function (error, stdout, stderr) {
-      if (error) {
-        callback(stderr);
+  cp.exec('git pull', {cwd: options.path}, function (error, stdout, stderr) {
+    if (error) {
+      callback(stderr);
+    } else {
+      scriptPath = options.script;
+      if (options.script !== undefined) {
+        cp.exec(scriptPath, {cwd: options.path},
+          function(error, stdout, stderr) {
+            if (err) {
+              callback(stderr);
+            } else {
+              callback();
+            }
+          });
       } else {
         callback();
       }
-    });
-  }
+    }
+  });
 }
 
 server.listen(8080);
