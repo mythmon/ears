@@ -41,12 +41,16 @@ function handleHit(data, callback) {
   var repo = data.repository.name;
   options = config.repositories[repo];
   if (options === undefined) {
-    callback('no such repository "' + repo + '"');
+    process.nextTick(function() {
+      callback('no such repository "' + repo + '"');
+    });
     return;
   }
   cp.exec('git pull', {cwd: options.path}, function (error, stdout, stderr) {
     if (error) {
-      callback(stderr);
+      process.nextTick(function() {
+        callback(stderr);
+      });
     } else {
       scriptPath = options.script;
       if (options.script !== undefined) {
@@ -59,7 +63,9 @@ function handleHit(data, callback) {
             }
           });
       } else {
-        callback();
+        process.nextTick(function() {
+          callback();
+        });
       }
     }
   });
